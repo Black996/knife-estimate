@@ -36,3 +36,4 @@ lerna-debug.log*
 
 # Personal notes
 notes.txt
+db.sqlite
