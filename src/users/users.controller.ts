@@ -1,4 +1,5 @@
 import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from '@nestjs/common';
+import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 import { CreateUserDto } from './dtos/createUser';
 import { UpdateUserDto } from './dtos/updateUser';
 import { UsersService } from './users.service';
@@ -18,8 +19,10 @@ export class UsersController {
         }
     }
 
+    @UseInterceptors(SerializeInterceptor)
     @Get(":id")
     findUser(@Param('id') id:string){
+        console.log('Controller started processing request');
         return this.usersService.findOneById(parseInt(id));
     }
 
