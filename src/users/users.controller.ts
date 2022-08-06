@@ -1,7 +1,6 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser';
 import { UpdateUserDto } from './dtos/updateUser';
-import { User } from './users.entity';
 import { UsersService } from './users.service';
 
 @Controller('auth')
@@ -32,10 +31,13 @@ export class UsersController {
     @Patch(":id")
     async updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
         try {
-            return await this.usersService.update(parseInt(id), body);
+            await this.usersService.update(parseInt(id), body);
+            return await this.usersService.findOneById(parseInt(id));
         } catch (err) {
             if (err instanceof Error && err.message.includes("UNIQUE constraint")) {
                 throw new BadRequestException("Email is already is use!");
+            } else {
+                throw err
             }
 
         }
