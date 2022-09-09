@@ -6,7 +6,7 @@ import { UsersService } from './users.service';
 import { ResponseUserDto } from './dtos/ResponseUserDto';
 
 @UseInterceptors(Serialize(ResponseUserDto))
-@Controller('auth')
+@Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) { }
 
