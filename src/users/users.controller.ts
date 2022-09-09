@@ -1,25 +1,14 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Query, UseInterceptors } from '@nestjs/common';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { CreateUserDto } from './dtos/createUser';
 import { UpdateUserDto } from './dtos/updateUser';
 import { UsersService } from './users.service';
 import { ResponseUserDto } from './dtos/ResponseUserDto';
+import { CommonHelpersService } from 'src/common-helpers/common-helpers.service';
 
 @UseInterceptors(Serialize(ResponseUserDto))
 @Controller('users')
 export class UsersController {
-    constructor(private usersService: UsersService) { }
-
-    @Post("signup")
-    async createUser(@Body() body: CreateUserDto) {
-        try {
-            return await this.usersService.create(body);
-        } catch (err) {
-            if (err instanceof Error && err.message.includes("UNIQUE constraint")) {
-                throw new BadRequestException("Email is already is use!");
-            }
-        }
-    }
+    constructor(private usersService: UsersService,private commonHelpersService:CommonHelpersService) { }
 
     @Get(":id")
     findUser(@Param('id') id:string){
@@ -38,7 +27,7 @@ export class UsersController {
             await this.usersService.update(parseInt(id), body);
             return await this.usersService.findOneById(parseInt(id));
         } catch (err) {
-            if (err instanceof Error && err.message.includes("UNIQUE constraint")) {
+            if (this.commonHelpersService.isDuplicate(err)) {
                 throw new BadRequestException("Email is already is use!");
             } else {
                 throw err
