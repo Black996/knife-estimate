@@ -8,6 +8,7 @@ import { User } from './users/users.entity';
 import { Estimate } from './estimates/estimates.entity';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { CommonHelpersModule } from './common-helpers/common-helpers.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -15,7 +16,7 @@ import { AuthModule } from './auth/auth.module';
     database: "db.sqlite",
     entities: [User, Estimate],
     synchronize: true
-  }), UsersModule, EstimatesModule, AuthModule],
+  }), UsersModule, EstimatesModule, AuthModule, CommonHelpersModule],
   controllers: [AppController],
   providers: [AppService, AuthService],
 })
