@@ -6,6 +6,8 @@ import { EstimatesModule } from './estimates/estimates.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
 import { Estimate } from './estimates/estimates.entity';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -13,8 +15,8 @@ import { Estimate } from './estimates/estimates.entity';
     database: "db.sqlite",
     entities: [User, Estimate],
     synchronize: true
-  }), UsersModule, EstimatesModule],
+  }), UsersModule, EstimatesModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule { }
