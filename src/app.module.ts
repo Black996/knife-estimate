@@ -9,9 +9,12 @@ import { Estimate } from './estimates/estimates.entity';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { CommonHelpersModule } from './common-helpers/common-helpers.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
     type: "sqlite",
     database: "db.sqlite",
     entities: [User, Estimate],
