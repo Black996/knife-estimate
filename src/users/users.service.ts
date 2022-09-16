@@ -22,10 +22,11 @@ export class UsersService {
     }
 
     findOneById(id: number) {
-        return this.findUserByIdThenApplyCb(id);
+        return this.findUserByIdThenApplyCb<User>(id);
     }
 
     async findOneByEmail(email: string) {
+        if(!email) throw new NotFoundException('Please provide an email to search for!');
         return this.repo.findOneBy({ email });
     }
 
