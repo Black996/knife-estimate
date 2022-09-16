@@ -1,17 +1,23 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
+import { LoginGuard } from './auth/login.guard';
 import { CreateUserDto } from './users/dtos/createUser';
+import { User } from './users/users.entity';
+
+interface RequestWithUser extends Request {
+  user:User;
+}
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService,private authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LoginGuard)
   @Post('/auth/login')
-  async login(@Request() req) {
-    return {state:'login successful'};
+  async login(@Req() req: RequestWithUser) {
+    return req.user;
   }
 
   @Post('/auth/register')
@@ -19,11 +25,11 @@ export class AppController {
    return this.authService.register(body) 
   }
 
+  @Post('/auth/logout')
+  logout(@Req() request: RequestWithUser){
+    request.logOut((err)=>{
+      if(err) return console.log('error occured: ',err);
+      request.session.cookie.maxAge = 0;
+    });
+  }
 }
-
-// {
-//   "username": "test3",
-//   "email": "test4@test.com",
-//   "password": "$2b$10$muIJjn2h6/Uy6OHTdksbmONudyVt9YGJ9J6oA2IHT1Pd0h8bGaMEi",
-//   "id": 11
-// }
