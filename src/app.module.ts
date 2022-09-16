@@ -10,6 +10,7 @@ import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { CommonHelpersModule } from './common-helpers/common-helpers.module';
 import { ConfigModule } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { ConfigModule } from '@nestjs/config';
     database: "db.sqlite",
     entities: [User, Estimate],
     synchronize: true
-  }), UsersModule, EstimatesModule, AuthModule, CommonHelpersModule],
+  }), UsersModule, EstimatesModule, AuthModule, CommonHelpersModule,PassportModule.register({session:true})],
   controllers: [AppController],
   providers: [AppService, AuthService],
 })

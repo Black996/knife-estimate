@@ -14,7 +14,6 @@ export class UsersController {
     @UseGuards(AuthenticatedGuard)
     @Get(":id")
     findUser(@Param('id') id:string){
-        console.log('Controller started processing request');
         return this.usersService.findOneById(parseInt(id));
     }
 
